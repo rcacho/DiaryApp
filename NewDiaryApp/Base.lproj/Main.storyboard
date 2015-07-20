@@ -87,7 +87,7 @@
                                 <rect key="frame" x="0.0" y="15" width="600" height="44"/>
                             </navigationBar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="127" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="fJa-En-Jdk">
-                                <rect key="frame" x="16" y="114" width="568" height="442"/>
+                                <rect key="frame" x="16" y="134" width="568" height="422"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="diaryEntryCell" rowHeight="127" id="7UE-P0-2aY" customClass="EntryViewCell">
@@ -125,7 +125,7 @@
                         <constraints>
                             <constraint firstItem="QEI-BR-RQm" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="3zf-Ab-NYv"/>
                             <constraint firstAttribute="trailingMargin" secondItem="fJa-En-Jdk" secondAttribute="trailing" id="6ei-iQ-w37"/>
-                            <constraint firstItem="fJa-En-Jdk" firstAttribute="top" secondItem="QEI-BR-RQm" secondAttribute="bottom" constant="50" id="80I-qe-vBS"/>
+                            <constraint firstItem="fJa-En-Jdk" firstAttribute="top" secondItem="QEI-BR-RQm" secondAttribute="bottom" constant="70" id="80I-qe-vBS"/>
                             <constraint firstAttribute="centerX" secondItem="QEI-BR-RQm" secondAttribute="centerX" id="8uf-io-4fa"/>
                             <constraint firstItem="jyV-Pf-zRb" firstAttribute="top" secondItem="QEI-BR-RQm" secondAttribute="bottom" id="Kx3-3d-pHA"/>
                             <constraint firstItem="fJa-En-Jdk" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="Pdg-ut-6fE"/>

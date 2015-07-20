@@ -44,7 +44,29 @@
     return cell;
 }
 
-#pragma mark -
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    id<NSFetchedResultsSectionInfo> sectionInfo = self.fetchedResultsController.sections[section];
+    return sectionInfo.name;
+}
+
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return UITableViewCellEditingStyleDelete;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    DiaryEntry *entry = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    CoreDataStack *aCoreDataStack = [CoreDataStack defaultStack];
+    [aCoreDataStack.managedObjectContext deleteObject:entry];
+    [aCoreDataStack saveContext];
+}
+
+- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
+    [self.tableView beginUpdates];
+}
+
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
+    [self.tableView endUpdates];
+}
 
 
 #pragma mark - Fetch Methods
@@ -56,7 +78,7 @@
     CoreDataStack *aCoreDataStack = [CoreDataStack defaultStack];
     NSFetchRequest *fetchRequest = [self entryListFetchRequest];
     
-    _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:aCoreDataStack.managedObjectContext sectionNameKeyPath:nil cacheName:nil];
+    _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:aCoreDataStack.managedObjectContext sectionNameKeyPath:@"sectionName" cacheName:nil];
     _fetchedResultsController.delegate = self;
     
     return _fetchedResultsController;
@@ -68,8 +90,36 @@
     return fetchRequest;
 }
 
-- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
-    [self.tableView reloadData];
+- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
+    switch (type) {
+        case NSFetchedResultsChangeInsert:
+            [self.tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+            break;
+        case NSFetchedResultsChangeDelete:
+            [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+            break;
+        case NSFetchedResultsChangeMove:
+            break;
+        case NSFetchedResultsChangeUpdate:
+            [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+            break;
+    }
+}
+
+- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id<NSFetchedResultsSectionInfo>)sectionInfo atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type {
+    switch (type) {
+        case NSFetchedResultsChangeInsert:
+            [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation: UITableViewRowAnimationAutomatic];
+            break;
+        case NSFetchedResultsChangeDelete:
+            [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
+            break;
+        case NSFetchedResultsChangeMove:
+            break;
+        case NSFetchedResultsChangeUpdate:
+            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
+            break;
+    }
 }
 
 #pragma mark - IBActions
