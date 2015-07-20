@@ -6,18 +6,25 @@
 //  Copyright (c) 2015 ricardo antonio cacho. All rights reserved.
 //
 
-#import "NewEntryViewController.h"
+#import "EntryViewController.h"
 #import "CoreDataStack.h"
 #import "DiaryEntry.h"
 
-@interface NewEntryViewController () <UITextFieldDelegate>
+@interface EntryViewController () <UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *diaryTextField;
 
 @end
 
-@implementation NewEntryViewController
+@implementation EntryViewController
 
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    if (self.diaryEntry != nil) {
+        self.diaryTextField.text = self.diaryEntry.entry;
+    }
+}
 
 - (void)insertNewDiaryEntry {
     CoreDataStack *aCoreDataStack = [CoreDataStack defaultStack];
@@ -28,14 +35,28 @@
     [aCoreDataStack saveContext];
 }
 
+- (void)setDiaryEntry:(DiaryEntry *)diaryEntry {
+    _diaryEntry = diaryEntry;
+}
+
 #pragma mark - IBActions
 
 - (IBAction)cancelWasPressed:(UIBarButtonItem *)sender {
     [self.navigationController popToRootViewControllerAnimated:NO];
 }
 
+- (void)updateDataEntry {
+    self.diaryEntry.entry = self.diaryTextField.text;
+    CoreDataStack *theCoreDataStack = [CoreDataStack defaultStack];
+    [theCoreDataStack saveContext];
+}
+
 - (IBAction)doneWasPressed:(UIBarButtonItem *)sender {
-    [self insertNewDiaryEntry];
+    if (self.diaryEntry != nil) {
+        [self updateDataEntry];
+    } else {
+        [self insertNewDiaryEntry];
+    }
     [self.navigationController popToRootViewControllerAnimated:NO];
 }
 

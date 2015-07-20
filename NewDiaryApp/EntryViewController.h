@@ -9,8 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "DiaryEntry.h"
 
-@interface NewEntryViewController : UIViewController
+@interface EntryViewController : UIViewController
 
-
+@property (nonatomic) DiaryEntry *diaryEntry;
 
 @end

@@ -21,10 +21,10 @@
             </objects>
             <point key="canvasLocation" x="-843" y="20"/>
         </scene>
-        <!--New Entry View Controller-->
+        <!--Entry View Controller-->
         <scene sceneID="Jiv-AO-hEr">
             <objects>
-                <viewController id="ilk-dE-8v2" customClass="NewEntryViewController" sceneMemberID="viewController">
+                <viewController id="ilk-dE-8v2" customClass="EntryViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="1EM-Zb-cbS"/>
                         <viewControllerLayoutGuide type="bottom" id="dJg-Bm-9T9"/>
@@ -122,6 +122,7 @@
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="QEI-BR-RQm" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="3zf-Ab-NYv"/>
                             <constraint firstAttribute="trailingMargin" secondItem="fJa-En-Jdk" secondAttribute="trailing" id="6ei-iQ-w37"/>
@@ -137,6 +138,9 @@
                                 <exclude reference="8uf-io-4fa"/>
                             </mask>
                         </variation>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="6DN-w2-UBO" appends="YES" id="z4Y-YJ-KbI"/>
+                        </connections>
                     </view>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="iNx-Fk-4Pg">
@@ -149,11 +153,22 @@
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="tableView" destination="fJa-En-Jdk" id="5hi-r5-6CW"/>
+                        <outlet property="tapGestureRecognizer" destination="6DN-w2-UBO" id="uuk-ff-REx"/>
                         <segue destination="ilk-dE-8v2" kind="show" identifier="createNewEntry" id="Gnm-gh-ZPQ"/>
+                        <segue destination="ilk-dE-8v2" kind="show" identifier="editEntry" id="5jk-PP-IPM"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="6DN-w2-UBO">
+                    <connections>
+                        <action selector="tapToEdit:" destination="vXZ-lx-hvc" id="JKy-Ql-aLY"/>
+                        <outlet property="delegate" destination="vXZ-lx-hvc" id="4ch-7E-pV6"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="5jk-PP-IPM"/>
+    </inferredMetricsTieBreakers>
 </document>

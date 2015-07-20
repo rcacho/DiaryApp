@@ -7,6 +7,7 @@
 //
 
 #import "DiaryRootViewController.h"
+#import "EntryViewController.h"
 #import "CoreDataStack.h"
 #import "DiaryEntry.h"
 #import "EntryViewCell.h"
@@ -17,6 +18,10 @@
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
+@property (strong, nonatomic) IBOutlet UITapGestureRecognizer *tapGestureRecognizer;
+
+@property DiaryEntry *selectedEntry;
+
 @end
 
 @implementation DiaryRootViewController
@@ -25,6 +30,12 @@
     [super viewDidLoad];
     
     [self.fetchedResultsController performFetch:nil];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"editEntry"]) {
+        [segue.destinationViewController setDiaryEntry:self.selectedEntry];
+    }
 }
 
 #pragma mark - TableView Data Source
@@ -55,9 +66,9 @@
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     DiaryEntry *entry = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    CoreDataStack *aCoreDataStack = [CoreDataStack defaultStack];
-    [aCoreDataStack.managedObjectContext deleteObject:entry];
-    [aCoreDataStack saveContext];
+    CoreDataStack *theCoreDataStack = [CoreDataStack defaultStack];
+    [theCoreDataStack.managedObjectContext deleteObject:entry];
+    [theCoreDataStack saveContext];
 }
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
@@ -75,10 +86,10 @@
     if (_fetchedResultsController != nil) {
         return _fetchedResultsController;
     }
-    CoreDataStack *aCoreDataStack = [CoreDataStack defaultStack];
+    CoreDataStack *theCoreDateStack = [CoreDataStack defaultStack];
     NSFetchRequest *fetchRequest = [self entryListFetchRequest];
     
-    _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:aCoreDataStack.managedObjectContext sectionNameKeyPath:@"sectionName" cacheName:nil];
+    _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:theCoreDateStack.managedObjectContext sectionNameKeyPath:@"sectionName" cacheName:nil];
     _fetchedResultsController.delegate = self;
     
     return _fetchedResultsController;
@@ -126,6 +137,16 @@
 
 - (IBAction)addDiaryEntry:(UIBarButtonItem *)sender {
     [self performSegueWithIdentifier:@"createNewEntry" sender:self];
+}
+
+#pragma mark - Gesture Recognizers
+
+- (IBAction)tapToEdit:(UITapGestureRecognizer *)sender {
+    CGPoint point = [self.tapGestureRecognizer locationInView:self.view];
+    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:point];
+    DiaryEntry *entry = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    self.selectedEntry = entry;
+    [self performSegueWithIdentifier:@"editEntry" sender:self];
 }
 
 @end
